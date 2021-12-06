@@ -1,0 +1,19 @@
+{
+  "name": "twitter-threads",
+  "version": "0.0.1",
+  "description": "Given a Tweet ID, the API can return either the tweet data itself, the entire tweet thread, the static HTML version of the tweet (for embedding), or static HTML version of the entire tweet thread.",
+  "main": "index.ts",
+  "scripts": {
+    "esbuild": "esbuild --bundle --platform=node ./src/lib/index.ts > index.js",
+    "lib": "tsc",
+    "prepublish": "npm run lib"
+  },
+  "author": "binhonglee",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^16.11.11",
+    "esbuild": "^0.14.2",
+    "node-fetch": "^3.1.0",
+    "typescript": "^4.5.2"
+  }
+}
