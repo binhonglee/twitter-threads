@@ -1,12 +1,16 @@
 {
   "name": "twitter-threads",
-  "version": "0.0.1",
+  "version": "0.0.5",
   "description": "Given a Tweet ID, the API can return either the tweet data itself, the entire tweet thread, the static HTML version of the tweet (for embedding), or static HTML version of the entire tweet thread.",
-  "main": "index.ts",
+  "main": "dist/lib/index.js",
+  "bin": {
+    "tweets": "dist/cli/cli.js"
+  },
+  "types": "dist/index.d.ts",
   "scripts": {
-    "esbuild": "esbuild --bundle --platform=node ./src/lib/index.ts > index.js",
+    "esbuild": "esbuild --bundle --platform=node ./src/lib/index.ts > dist/lib/index.js && esbuild --bundle --platform=node ./src/cli/cli.js > dist/cli/cli.js",
     "lib": "tsc",
-    "prepublish": "npm run lib"
+    "prepublish": "rm -rf dist/ && npm run lib && npm run esbuild"
   },
   "author": "binhonglee",
   "license": "MIT",
