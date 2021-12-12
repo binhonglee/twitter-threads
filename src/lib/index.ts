@@ -55,15 +55,15 @@ const api_prefix = "https://cdn.syndication.twimg.com/tweet?id=";
 
 const singleTweetContent = `
 <div class="tweet">
-  <a rel="noopener" href="https://twitter.com/{$USER_SCREEN_NAME}/">
+  <a rel="noopener noreferrer" href="https://twitter.com/{$USER_SCREEN_NAME}/">
     <div class="profile_picture_block">
-      <img src="{$PROFILE_PIC_SRC}" />
+      <img src="{$PROFILE_PIC_SRC}" alt="Profile picture of @{$USER_SCREEN_NAME} on Twitter." />
       @{$USER_SCREEN_NAME}
     </div>
   </a>
   <p class="text">{$TEXT}</p>{$QUOTED}{$IMG}
   <p class="date">
-    <a rel="noopener" href="https://twitter.com/{$USER_SCREEN_NAME}/status/{$TWEET_ID}">Read more...</a>
+    <a rel="noopener noreferrer" href="https://twitter.com/{$USER_SCREEN_NAME}/status/{$TWEET_ID}">Read more...</a>
   </p>
 </div>`;
 
@@ -72,8 +72,9 @@ const quotedContent = `
   {$TEXT}
   <br/>
   <p>
-    <a rel="noopener" href="https://twitter.com/{$USER_SCREEN_NAME}/">@{$USER_SCREEN_NAME}</a>
-    (<a rel="noopener" href="https://twitter.com/{$USER_SCREEN_NAME}/status/{$TWEET_ID}">{$TWEET_DATE}</a>)
+    - <a rel="noopener noreferrer" href="https://twitter.com/{$USER_SCREEN_NAME}/">@{$USER_SCREEN_NAME}</a>
+    <br />
+    <a rel="noopener noreferrer" href="https://twitter.com/{$USER_SCREEN_NAME}/status/{$TWEET_ID}">Read more...</a>
   </p>
 </div>`;
 
@@ -84,23 +85,24 @@ const imageContent = `<br />
 <br />
 `
 
-const tweetTextContent = `<p class="text">{$TEXT}</p>{$QUOTED}{$IMG}`;
+const tweetTextContent = `<p class="text">{$TEXT}</p>{$QUOTED}{$IMG}
+  `;
 
 const fullPageThreadContent = `<div class="tweet_block">
-  <a rel="noopener" href="https://twitter.com/{$USER_SCREEN_NAME}/">
+  <a rel="noopener noreferrer author" href="https://twitter.com/{$USER_SCREEN_NAME}/">
     <div class="profile_picture_block">
-      <img src="{$PROFILE_PIC_SRC}" />
+      <img src="{$PROFILE_PIC_SRC}" alt="Profile picture of @{$USER_SCREEN_NAME} on Twitter." />
       @{$USER_SCREEN_NAME}
     </div>
   </a>
   {$CONTENT}<p class="date">
-    <a rel="noopener" href="https://twitter.com/{$USER_SCREEN_NAME}/status/{$TWEET_ID}">{$TWEET_DATE}</a>
+    <a rel="noopener noreferrer alternate" href="https://twitter.com/{$USER_SCREEN_NAME}/status/{$TWEET_ID}">{$TWEET_DATE}</a>
   </p>
 </div>`;
 
-const urlContent = `<a style="word-break:break-all;" rel="noopener" href="{$URL}" >{$URL}</a>`;
-const hashtagUrlContent = `<a rel="noopener" href="https://twitter.com/hashtag/{$HASHTAG}" >#{$HASHTAG}</a>`;
-const mentionUrlContent = `<a rel="noopener" href="https://twitter.com/{$SCREEN_NAME}" >@{$SCREEN_NAME}</a>`;
+const urlContent = `<a style="word-break:break-all;" rel="noopener noreferrer" href="{$URL}" >{$URL}</a>`;
+const hashtagUrlContent = `<a rel="noopener noreferrer" href="https://twitter.com/hashtag/{$HASHTAG}" >#{$HASHTAG}</a>`;
+const mentionUrlContent = `<a rel="noopener noreferrer" href="https://twitter.com/{$SCREEN_NAME}" >@{$SCREEN_NAME}</a>`;
 
 export async function genTweet(tweet_id: string): Promise<Tweet> {
   const res = await fetch(api_prefix + tweet_id);
