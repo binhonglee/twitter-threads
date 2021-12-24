@@ -78,12 +78,10 @@ const quotedContent = `
   </p>
 </div>`;
 
-const imageContent = `<br />
-<div class="tweet_img_block">
-  <img class="tweet_img" src="{$IMG_URL}" />
-</div>
-<br />
-`
+const imageContent = `
+  <div class="tweet_img_block">
+    <img class="tweet_img" src="{$IMG_URL}" />
+  </div>`
 
 const tweetTextContent = `<p class="text">{$TEXT}</p>{$QUOTED}{$IMG}
   `;
@@ -111,9 +109,7 @@ export async function genTweet(tweet_id: string): Promise<Tweet> {
 
 export async function genThread(tweet_id: string): Promise<Tweet[]> {
   const json = await genTweet(tweet_id);
-
   let toRet: Tweet[] = [];
-
   if (json.in_reply_to_status_id_str !== undefined) {
     toRet = await genThread(json.in_reply_to_status_id_str);
   }
@@ -123,9 +119,13 @@ export async function genThread(tweet_id: string): Promise<Tweet[]> {
 }
 
 export async function genThreadHTML(tweet_id: string): Promise<string> {
+  const thread = await genThread(tweet_id);
+  return await genThreadHTMLFromTweets(thread);
+}
+
+export async function genThreadHTMLFromTweets(thread: Tweet[]): Promise<string> {
   let toRet = fullPageThreadContent;
   let body = "";
-  const thread = await genThread(tweet_id);
 
   toRet = toRet.split("{$USER_SCREEN_NAME}").join(thread[0].user.screen_name);
   toRet = toRet.split("{$PROFILE_PIC_SRC}").join(processImageURL(thread[0].user.profile_image_url_https));
@@ -159,6 +159,10 @@ export async function genThreadHTML(tweet_id: string): Promise<string> {
 
 export async function genTweetHTML(tweet_id: string): Promise<string> {
   const tweet = await genTweet(tweet_id);
+  return await genTweetHTMLFromTweet(tweet);
+}
+
+export async function genTweetHTMLFromTweet(tweet: Tweet): Promise<string> {
   let toRet = singleTweetContent;
   toRet = toRet.split("{$USER_SCREEN_NAME}").join(tweet.user.screen_name);
   toRet = toRet.split("{$PROFILE_PIC_SRC}").join(processImageURL(tweet.user.profile_image_url_https));
@@ -180,7 +184,7 @@ export async function genTweetHTML(tweet_id: string): Promise<string> {
   } else {
     toRet = toRet.replace("{$IMG}", "");
   }
-return toRet;
+  return toRet;
 }
 
 function processImageURL(url: string): string {
@@ -215,12 +219,21 @@ function processText(text: string, entities: Entities | undefined, quoted: Quote
       );
     }
 
+    entities.hashtags.sort((a, b) => b.text.localeCompare(a.text));
     entities.hashtags.forEach(
       (hashtag) => {
         text = text
-          .split("#" + hashtag.text)
+          .split(" #" + hashtag.text)
           .join(
-            hashtagUrlContent
+            (" " + hashtagUrlContent)
+              .split("{$HASHTAG}")
+              .join(hashtag.text)
+          );
+
+        text = text
+          .split("\n#" + hashtag.text)
+          .join(
+            ("\n" + hashtagUrlContent)
               .split("{$HASHTAG}")
               .join(hashtag.text)
           );
@@ -237,7 +250,8 @@ function processText(text: string, entities: Entities | undefined, quoted: Quote
     )
   }
   text = text.trim().split("\n").join("\n  <br />");
-  text = text.trim().split("\n  <br />\n  <br />").join("\n  <br />");
+  text = text.trim().split("\n  <br />\n  <br />\n  <br />").join("\n  <br />\n  <br />");
+  text = text.trim().split("\n  <br />\n  <br />\n  <div class=\"tweet_img_block\">").join("\n  <div class=\"tweet_img_block\">")
   return text;
 }
 

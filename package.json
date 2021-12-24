@@ -1,6 +1,6 @@
 {
   "name": "twitter-threads",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Given a Tweet ID, the API can return either the tweet data itself, the entire tweet thread, the static HTML version of the tweet (for embedding), or static HTML version of the entire tweet thread.",
   "main": "dist/lib/index.js",
   "bin": {
