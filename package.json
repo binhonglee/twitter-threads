@@ -15,7 +15,7 @@
   "author": "binhonglee",
   "license": "MIT",
   "devDependencies": {
-    "@types/node": "^18.8.0",
+    "@types/node": "^18.8.1",
     "esbuild": "^0.15.10",
     "node-fetch": "^3.2.10",
     "typescript": "^4.8.4"
