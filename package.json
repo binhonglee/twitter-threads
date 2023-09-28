@@ -16,7 +16,7 @@
   "license": "MIT",
   "devDependencies": {
     "@types/node": "^20.7.1",
-    "esbuild": "^0.19.3",
+    "esbuild": "^0.19.4",
     "node-fetch": "^3.3.2",
     "typescript": "^5.2.2"
   }
